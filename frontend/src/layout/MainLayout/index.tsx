@@ -4,7 +4,8 @@ import { styled, useTheme } from '@mui/material/styles';
 import Header from './Header';
 
 const Main = styled('main')(({ theme }) => ({
-  background: '#8F8F8F'
+  ...theme.typography.mainContent,
+  color: '#333'
 }));
 
 const MainLayout = () => {

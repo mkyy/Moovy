@@ -47,9 +47,10 @@ export default function themeTypography(theme: any) {
       color: theme.darkTextSecondary
     },
     caption: {
-      fontSize: '0.75rem',
-      color: theme.darkTextSecondary,
-      fontWeight: 400
+      fontSize: '16px',
+      textTransform: 'capitalize' as const,
+      color: theme.textDark,
+      fontWeight: 700
     },
     body1: {
       fontSize: '0.875rem',
@@ -62,9 +63,6 @@ export default function themeTypography(theme: any) {
       lineHeight: '1.5em',
       color: theme.darkTextPrimary
     },
-    //   button: {
-    //     textTransform: 'capitalize'
-    //   },
     customInput: {
       marginTop: 1,
       marginBottom: 1,
@@ -87,14 +85,12 @@ export default function themeTypography(theme: any) {
       }
     },
     mainContent: {
-      backgroundColor: theme.background,
+      backgroundColor: theme.backgroundDefault,
       width: '100%',
       minHeight: 'calc(100vh - 88px)',
       flexGrow: 1,
       padding: '20px',
-      marginTop: '88px',
-      marginRight: '20px',
-      borderRadius: `${theme?.customization?.borderRadius}px`
+      marginTop: '88px'
     },
     menuCaption: {
       fontSize: '0.875rem',
@@ -107,25 +103,6 @@ export default function themeTypography(theme: any) {
       fontSize: '0.6875rem',
       fontWeight: 500,
       color: theme.darkTextSecondary
-    },
-    commonAvatar: {
-      cursor: 'pointer',
-      borderRadius: '8px'
-    },
-    smallAvatar: {
-      width: '22px',
-      height: '22px',
-      fontSize: '1rem'
-    },
-    mediumAvatar: {
-      width: '34px',
-      height: '34px',
-      fontSize: '1.2rem'
-    },
-    largeAvatar: {
-      width: '44px',
-      height: '44px',
-      fontSize: '1.5rem'
     }
   };
 }

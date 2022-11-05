@@ -26,7 +26,7 @@ export const theme = (customization: CustomizationType) => {
     darkTextPrimary: color.grey700,
     darkTextSecondary: color.grey500,
     textDark: color.grey900,
-    menuSelected: color.secondaryDark,
+    menuSelected: color.primaryMain,
     menuSelectedBack: color.secondaryLight,
     divider: color.grey200,
     customization

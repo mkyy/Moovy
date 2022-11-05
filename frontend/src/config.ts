@@ -3,7 +3,7 @@ const config = {
   // like '/berry-material-react/react/default'
   basename: '',
   defaultPath: '/search/default',
-  fontFamily: `sans-serif`,
+  fontFamily: `Inter`,
   borderRadius: 10
 };
 

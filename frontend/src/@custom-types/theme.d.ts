@@ -3,3 +3,20 @@ export type CustomizationType = {
   borderRadius: string | number;
   navType: string | null;
 };
+
+declare module '@mui/material/styles' {
+  // allow configuration using `createTheme`
+
+  interface TypographyVariants {
+    mainContent: React.CSSProperties;
+    menuCaption?: React.CSSProperties;
+    subMenuCaption?: React.CSSProperties;
+    caption?: React.CSSProperties;
+  }
+  interface TypographyVariantsOptions {
+    mainContent?: React.CSSProperties;
+    menuCaption?: React.CSSProperties;
+    subMenuCaption?: React.CSSProperties;
+    caption?: React.CSSProperties;
+  }
+}
