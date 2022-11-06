@@ -2,8 +2,9 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Logo from 'ui-component/Logo';
 import { Link } from 'react-router-dom';
-import React, { MouseEvent, MouseEventHandler, useState } from 'react';
+import React, { useState } from 'react';
 import { useTheme } from '@mui/material';
+import ThemeSwitch from './ThemeSwitch';
 
 const pages = [
   { id: 'search', url: 'search/default', title: 'Search' },
@@ -41,6 +42,8 @@ const Header = () => {
           </Button>
         ))}
       </Box>
+      <Box flexGrow={2} />
+      <ThemeSwitch />
     </>
   );
 };

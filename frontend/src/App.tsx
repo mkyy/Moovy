@@ -1,18 +1,24 @@
 import { CssBaseline, StyledEngineProvider, ThemeProvider } from '@mui/material';
+import { useContext } from 'react';
 
 // project imports
-import Routes from 'routes';
+import { CustomizationContext } from 'context/CustomizationContext';
 import themes from 'themes';
+import Routes from 'routes';
 
 // config file
 import config from 'config';
 
 function App() {
+  const ThemeContext = useContext(CustomizationContext);
+
   // handling theme preference
   if (localStorage.getItem('theme-mode') === null) {
     localStorage.setItem('theme-mode', 'light');
+    ThemeContext?.setThemeStyle('light');
+  } else {
+    ThemeContext?.setThemeStyle(localStorage.getItem('theme-mode') ?? 'light');
   }
-  const themeOption = localStorage.getItem('theme-mode');
 
   return (
     <StyledEngineProvider injectFirst>
@@ -20,7 +26,7 @@ function App() {
         theme={themes({
           fontFamily: config.fontFamily,
           borderRadius: config.borderRadius,
-          navType: themeOption
+          navType: ThemeContext?.themeStyle
         })}
       >
         <CssBaseline />

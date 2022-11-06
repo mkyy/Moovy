@@ -16,21 +16,35 @@ import themeTypography from './typography';
 
 export const theme = (customization: CustomizationType) => {
   const color = colors;
+  const mode = customization.navType;
 
-  const themeOption = {
-    colors: color,
-    heading: color.grey900,
-    paper: color.paper,
-    backgroundDefault: color.paper,
-    background: color.primaryLight,
-    darkTextPrimary: color.grey700,
-    darkTextSecondary: color.grey500,
-    textDark: color.grey900,
-    menuSelected: color.primaryMain,
-    menuSelectedBack: color.secondaryLight,
-    divider: color.grey200,
-    customization
-  };
+  const themeOption =
+    mode === 'light'
+      ? {
+          colors: color,
+          heading: color.grey900,
+          paper: color.paper,
+          backgroundDefault: color.paper,
+          background: color.primaryLight,
+          darkTextPrimary: color.grey700,
+          darkTextSecondary: color.grey500,
+          textDark: color.grey900,
+          divider: color.grey200,
+          customization
+        }
+      : {
+          // DARK MODE COLORS
+          colors: color,
+          heading: color.grey900,
+          paper: color.darkPaper,
+          backgroundDefault: color.paper,
+          background: color.primaryLight,
+          darkTextPrimary: color.grey700,
+          darkTextSecondary: color.grey500,
+          textDark: color.grey900,
+          divider: color.grey200,
+          customization
+        };
 
   const themes = createTheme({
     direction: 'ltr',

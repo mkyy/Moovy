@@ -1,5 +1,4 @@
 export default function componentStyleOverrides(theme: any) {
-  const bgColor = theme.colors?.grey50;
   return {
     MuiButton: {
       styleOverrides: {
@@ -12,7 +11,8 @@ export default function componentStyleOverrides(theme: any) {
     MuiAppBar: {
       styleOverrides: {
         root: {
-          background: theme.paper
+          background: theme.paper,
+          height: '88px'
         }
       }
     },

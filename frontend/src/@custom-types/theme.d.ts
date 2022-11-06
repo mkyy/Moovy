@@ -1,7 +1,7 @@
 export type CustomizationType = {
   fontFamily: string;
   borderRadius: string | number;
-  navType: string | null;
+  navType: string | null | undefined;
 };
 
 declare module '@mui/material/styles' {
