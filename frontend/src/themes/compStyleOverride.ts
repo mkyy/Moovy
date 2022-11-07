@@ -28,6 +28,30 @@ export default function componentStyleOverrides(theme: any) {
           borderRadius: `${theme?.customization?.borderRadius}px`
         }
       }
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          background: theme.background
+        }
+      }
+    },
+    MuiCardHeader: {
+      styleOverrides: {
+        root: {
+          paddingInline: 5
+        },
+        content: {
+          maxWidth: 'calc(100% - 56px)'
+        }
+      }
+    },
+    MuiCardMedia: {
+      styleOverrides: {
+        root: {
+          borderRadius: `${theme?.customization?.borderRadius}px`
+        }
+      }
     }
   };
 }

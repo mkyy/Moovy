@@ -50,7 +50,7 @@ export default function themePalette(theme: any) {
       100: theme.colors?.grey100,
       500: theme.darkTextSecondary,
       600: theme.heading,
-      700: theme.darkTextPrimary,
+      700: theme.colors?.grey700,
       900: theme.textDark
     },
     dark: {

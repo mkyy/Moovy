@@ -25,7 +25,7 @@ export const theme = (customization: CustomizationType) => {
           heading: color.grey900,
           paper: color.paper,
           backgroundDefault: color.paper,
-          background: color.primaryLight,
+          background: color.grey50,
           darkTextPrimary: color.grey700,
           darkTextSecondary: color.grey500,
           textDark: color.grey900,
@@ -35,10 +35,10 @@ export const theme = (customization: CustomizationType) => {
       : {
           // DARK MODE COLORS
           colors: color,
-          heading: color.grey900,
+          heading: color.grey200,
           paper: color.darkPaper,
           backgroundDefault: color.paper,
-          background: color.primaryLight,
+          background: color.darkBackground,
           darkTextPrimary: color.grey700,
           darkTextSecondary: color.grey500,
           textDark: color.grey900,

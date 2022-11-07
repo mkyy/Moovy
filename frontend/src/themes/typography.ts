@@ -58,9 +58,11 @@ export default function themeTypography(theme: any) {
       lineHeight: '1.334em'
     },
     body2: {
-      letterSpacing: '0em',
-      fontWeight: 400,
-      lineHeight: '1.5em',
+      fontFamily: 'Arial',
+      fontSize: '24px',
+      fontWeight: '400',
+      textAlign: 'center' as const,
+      lineHeight: '28px',
       color: theme.darkTextPrimary
     },
     customInput: {
