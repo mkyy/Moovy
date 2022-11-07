@@ -45,7 +45,7 @@ const MainCard = forwardRef<HTMLDivElement, Props>(
             }}
             subheader={year}
             action={
-              <Button variant='contained' sx={{ minWidth: 'fit-content', mt: 1 }}>
+              <Button variant='contained' color='success' sx={{ minWidth: 'fit-content', mt: 1 }}>
                 <Add />
               </Button>
             }
