@@ -10,6 +10,7 @@ exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const typeorm_1 = require("@nestjs/typeorm");
+const movie_module_1 = require("./app/movie/movie.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -25,7 +26,8 @@ AppModule = __decorate([
                 database: process.env.DB_DATABASE,
                 synchronize: true,
                 entities: [__dirname + '/**/*.entity{.js,.ts}']
-            })
+            }),
+            movie_module_1.MovieModule
         ]
     })
 ], AppModule);
