@@ -3,3 +3,7 @@
 */node_modules
 /.pnp
 .pnp.js
+
+# variables
+.env
+*/.env
