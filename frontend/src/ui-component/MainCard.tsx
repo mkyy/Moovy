@@ -11,18 +11,16 @@ import {
 import { forwardRef } from 'react';
 import { ReactComponent as Star } from 'assets/images/star.svg';
 import { ReactComponent as Books } from 'assets/images/books.svg';
+import { Movie } from '@custom-types/movie';
 
 interface Props {
   border?: boolean;
-  content?: boolean;
-  title: string;
-  poster: string;
-  year: string | number;
-  rating?: string;
+  movieData: Movie;
+  handleToggle: (movie: Movie) => void;
 }
 
 const MainCard = forwardRef<HTMLDivElement, Props>(
-  ({ border = false, content = true, title, poster, year, rating, ...others }, ref) => {
+  ({ border = false, movieData, handleToggle, ...others }, ref) => {
     const theme = useTheme();
 
     return (
@@ -39,12 +37,17 @@ const MainCard = forwardRef<HTMLDivElement, Props>(
         }}
       >
         {/* card media|poster */}
-        <CardMedia component='img' image={poster} alt={title} sx={{ flexGrow: 2 }} />
+        <CardMedia
+          component='img'
+          image={movieData.Poster}
+          alt={movieData.Title}
+          sx={{ flexGrow: 2 }}
+        />
 
         {/* card header and action */}
-        {title && (
+        {movieData.Title && (
           <CardHeader
-            title={title}
+            title={movieData.Title}
             titleTypographyProps={{
               sx: {
                 whiteSpace: 'nowrap',
@@ -54,12 +57,12 @@ const MainCard = forwardRef<HTMLDivElement, Props>(
                 maxWidth: '90%'
               }
             }}
-            subheader={year}
+            subheader={movieData.Year}
             action={
               <Box display='flex' alignItems='center'>
                 <Star />
                 <Typography ml={1} variant='h3'>
-                  {rating}
+                  {movieData.imdbRating}
                 </Typography>
               </Box>
             }
@@ -67,10 +70,29 @@ const MainCard = forwardRef<HTMLDivElement, Props>(
         )}
 
         {/* card content */}
-        {content && (
+        {!movieData.onLibrary && (
           <CardContent>
-            <Button variant='contained' fullWidth color='success' startIcon={<Books />}>
+            <Button
+              variant='contained'
+              fullWidth
+              color='success'
+              startIcon={<Books />}
+              onClick={() => handleToggle(movieData)}
+            >
               Add to Library
+            </Button>
+          </CardContent>
+        )}
+        {movieData.onLibrary && (
+          <CardContent>
+            <Button
+              variant='contained'
+              fullWidth
+              color='error'
+              startIcon={<Books />}
+              onClick={() => handleToggle(movieData)}
+            >
+              Remove
             </Button>
           </CardContent>
         )}

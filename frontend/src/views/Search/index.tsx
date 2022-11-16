@@ -3,17 +3,9 @@ import { Box, Container, Grid, Typography } from '@mui/material';
 import axios, { AxiosPromise } from 'axios';
 import { useEffect, useState } from 'react';
 import MainCard from 'ui-component/MainCard';
+import { Movie } from '@custom-types/movie';
 // images
 import Glass from 'ui-component/Glass';
-
-type Movie = {
-  Poster: string;
-  Title: string;
-  Type: string;
-  Year: string;
-  imdbID: string;
-  imdbRating?: string;
-};
 
 const Search = () => {
   const [results, setResults] = useState<Movie[] | null>(null);
@@ -23,6 +15,40 @@ const Search = () => {
     baseURL: process.env.REACT_APP_BASEURL
   });
 
+  const MoovyApi = axios.create({
+    baseURL: process.env.REACT_APP_MOOVY_API
+  });
+
+  const handleToggle = (movie: Movie) => {
+    if (movie.onLibrary)
+      return MoovyApi.delete('api/movie', { data: { imdbID: movie.imdbID } })
+        .then(() => {
+          const resultsUpdated = results?.map((result) => {
+            if (result.imdbID !== movie.imdbID) return result;
+
+            return { ...result, onLibrary: false };
+          });
+
+          setResults(resultsUpdated ?? results);
+        })
+        .catch((err) => console.log(err));
+
+    MoovyApi.post('api/movie', {
+      title: movie.Title,
+      poster: movie.Poster,
+      imdbRating: movie.imdbRating,
+      imdbID: movie.imdbID
+    }).catch((err) => console.log(err));
+
+    const resultsUpdated = results?.map((result) => {
+      if (result.imdbID !== movie.imdbID) return result;
+
+      return { ...result, onLibrary: true };
+    });
+
+    setResults(resultsUpdated ?? results);
+  };
+
   useEffect(() => {
     if (filter === null || filter === undefined) return setResults(null);
 
@@ -30,8 +56,17 @@ const Search = () => {
       .get(`?apikey=${process.env.REACT_APP_APIKEY}&s=${filter}&type=movie`)
       .then(async (snapshot) => {
         const data: Movie[] = snapshot.data.Search;
+        const favorites: Movie[] = [];
         const requests: Promise<AxiosPromise<any>>[] = [];
         const res: Array<any> = [];
+
+        await MoovyApi.get('api/movies').then((snapshot) => {
+          const myLibraryMovies: Movie[] = snapshot.data;
+
+          myLibraryMovies.forEach((movie) => {
+            favorites.push(movie);
+          });
+        });
 
         // requesting each movie details to get imdb Rating, that doesn't come on search request.
         data.forEach((movie) => {
@@ -40,10 +75,18 @@ const Search = () => {
 
         await Promise.all(requests).then((snapshot) => {
           snapshot.forEach((movie) => {
-            res.push(movie.data);
+            let isOnLibrary = false;
+            const onLibraryMovie = favorites.find(
+              (movieFromLibrary) => movieFromLibrary.imdbID === movie.data.imdbID
+            );
+
+            if (onLibraryMovie !== undefined) {
+              isOnLibrary = true;
+            }
+
+            res.push({ ...movie.data, onLibrary: isOnLibrary });
           });
         });
-        console.log(res);
         setResults(res);
       })
       .catch((error) => {
@@ -73,12 +116,7 @@ const Search = () => {
         )}
         {results?.map((movie) => (
           <Grid item key={movie.imdbID} xs={12} sm={6} md={3}>
-            <MainCard
-              poster={movie.Poster}
-              title={movie.Title}
-              year={movie.Year}
-              rating={movie.imdbRating}
-            />
+            <MainCard movieData={movie} handleToggle={handleToggle} />
           </Grid>
         ))}
       </Grid>
