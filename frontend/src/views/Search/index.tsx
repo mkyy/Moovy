@@ -34,8 +34,8 @@ const Search = () => {
         .catch((err) => console.log(err));
 
     MoovyApi.post('api/movie', {
-      title: movie.Title,
-      poster: movie.Poster,
+      Title: movie.Title,
+      Poster: movie.Poster,
       imdbRating: movie.imdbRating,
       imdbID: movie.imdbID
     }).catch((err) => console.log(err));
