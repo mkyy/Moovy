@@ -1,3 +1,3 @@
 export class DeleteMovieDto {
-  id: string;
+  imdbID: string;
 }

@@ -24,7 +24,7 @@ export class MovieService {
 
   async delete(data: DeleteMovieDto) {
     return this.movieRepository.delete({
-      id: data.id
+      imdbID: data.imdbID
     });
   }
 }

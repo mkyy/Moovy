@@ -15,5 +15,5 @@ export class MovieEntity {
   imdbRating: string;
 
   @Column({ name: 'imdb_id' })
-  imdbId: string;
+  imdbID: string;
 }

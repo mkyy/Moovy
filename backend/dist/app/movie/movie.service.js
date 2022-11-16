@@ -29,7 +29,7 @@ let MovieService = class MovieService {
     }
     async delete(data) {
         return this.movieRepository.delete({
-            id: data.id
+            imdbID: data.imdbID
         });
     }
 };

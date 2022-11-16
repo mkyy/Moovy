@@ -3,5 +3,5 @@ export declare class MovieEntity {
     title: string;
     poster: string;
     imdbRating: string;
-    imdbId: string;
+    imdbID: string;
 }
