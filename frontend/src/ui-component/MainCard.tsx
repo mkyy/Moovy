@@ -1,6 +1,16 @@
-import { Add } from '@mui/icons-material';
-import { Button, Card, CardHeader, CardMedia, useTheme } from '@mui/material';
-import { forwardRef, ReactFragment } from 'react';
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardMedia,
+  Typography,
+  useTheme
+} from '@mui/material';
+import { forwardRef } from 'react';
+import { ReactComponent as Star } from 'assets/images/star.svg';
+import { ReactComponent as Books } from 'assets/images/books.svg';
 
 interface Props {
   border?: boolean;
@@ -8,10 +18,11 @@ interface Props {
   title: string;
   poster: string;
   year: string | number;
+  rating?: string;
 }
 
 const MainCard = forwardRef<HTMLDivElement, Props>(
-  ({ border = false, content = true, title, poster, year, ...others }, ref) => {
+  ({ border = false, content = true, title, poster, year, rating, ...others }, ref) => {
     const theme = useTheme();
 
     return (
@@ -45,20 +56,24 @@ const MainCard = forwardRef<HTMLDivElement, Props>(
             }}
             subheader={year}
             action={
-              <Button variant='contained' color='success' sx={{ minWidth: 'fit-content', mt: 1 }}>
-                <Add />
-              </Button>
+              <Box display='flex' alignItems='center'>
+                <Star />
+                <Typography ml={1} variant='h3'>
+                  {rating}
+                </Typography>
+              </Box>
             }
           />
         )}
 
         {/* card content */}
-        {/* {content && (
-          <CardContent sx={contentSX} className={contentClass}>
-            {children}
+        {content && (
+          <CardContent>
+            <Button variant='contained' fullWidth color='success' startIcon={<Books />}>
+              Add to Library
+            </Button>
           </CardContent>
         )}
-        {!content && children} */}
       </Card>
     );
   }

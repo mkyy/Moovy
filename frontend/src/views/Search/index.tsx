@@ -1,11 +1,10 @@
 import SearchBar from '@mkyy/mui-search-bar';
-import { Box, Container, Grid, SvgIcon, Typography } from '@mui/material';
-import axios from 'axios';
+import { Box, Container, Grid, Typography } from '@mui/material';
+import axios, { AxiosPromise } from 'axios';
 import { useEffect, useState } from 'react';
 import MainCard from 'ui-component/MainCard';
-
 // images
-import { ReactComponent as Glass } from 'assets/images/glass.svg';
+import Glass from 'ui-component/Glass';
 
 type Movie = {
   Poster: string;
@@ -13,6 +12,7 @@ type Movie = {
   Type: string;
   Year: string;
   imdbID: string;
+  imdbRating?: string;
 };
 
 const Search = () => {
@@ -25,11 +25,26 @@ const Search = () => {
 
   useEffect(() => {
     if (filter === null || filter === undefined) return setResults(null);
+
     api
       .get(`?apikey=${process.env.REACT_APP_APIKEY}&s=${filter}&type=movie`)
-      .then((snapshot) => {
-        setResults(snapshot.data.Search);
-        console.log(snapshot.data.Search);
+      .then(async (snapshot) => {
+        const data: Movie[] = snapshot.data.Search;
+        const requests: Promise<AxiosPromise<any>>[] = [];
+        const res: Array<any> = [];
+
+        // requesting each movie details to get imdb Rating, that doesn't come on search request.
+        data.forEach((movie) => {
+          requests.push(api.get(`?apikey=${process.env.REACT_APP_APIKEY}&i=${movie.imdbID}`));
+        });
+
+        await Promise.all(requests).then((snapshot) => {
+          snapshot.forEach((movie) => {
+            res.push(movie.data);
+          });
+        });
+        console.log(res);
+        setResults(res);
       })
       .catch((error) => {
         console.log(error);
@@ -57,8 +72,13 @@ const Search = () => {
           </Box>
         )}
         {results?.map((movie) => (
-          <Grid item key={movie.imdbID} xs={3}>
-            <MainCard poster={movie.Poster} title={movie.Title} year={movie.Year} />
+          <Grid item key={movie.imdbID} xs={12} sm={6} md={3}>
+            <MainCard
+              poster={movie.Poster}
+              title={movie.Title}
+              year={movie.Year}
+              rating={movie.imdbRating}
+            />
           </Grid>
         ))}
       </Grid>

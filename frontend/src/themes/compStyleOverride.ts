@@ -52,6 +52,14 @@ export default function componentStyleOverrides(theme: any) {
           borderRadius: `${theme?.customization?.borderRadius}px`
         }
       }
+    },
+    MuiCardContent: {
+      styleOverrides: {
+        root: {
+          paddingTop: '0 !important',
+          paddingBottom: '0 !important'
+        }
+      }
     }
   };
 }
