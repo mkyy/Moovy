@@ -20,11 +20,11 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({ name: 'title' }),
     __metadata("design:type", String)
-], MovieEntity.prototype, "title", void 0);
+], MovieEntity.prototype, "Title", void 0);
 __decorate([
     (0, typeorm_1.Column)({ name: 'poster' }),
     __metadata("design:type", String)
-], MovieEntity.prototype, "poster", void 0);
+], MovieEntity.prototype, "Poster", void 0);
 __decorate([
     (0, typeorm_1.Column)({ name: 'imdb_rating' }),
     __metadata("design:type", String)

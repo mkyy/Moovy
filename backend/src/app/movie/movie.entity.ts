@@ -6,10 +6,10 @@ export class MovieEntity {
   id: string;
 
   @Column({ name: 'title' })
-  title: string;
+  Title: string;
 
   @Column({ name: 'poster' })
-  poster: string;
+  Poster: string;
 
   @Column({ name: 'imdb_rating' })
   imdbRating: string;

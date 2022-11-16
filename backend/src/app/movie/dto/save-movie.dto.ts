@@ -1,6 +1,6 @@
 export class SaveMovieDto {
-  title: string;
-  poster: string;
+  Title: string;
+  Poster: string;
   imdbRating: string;
   imdbId: string;
 }
