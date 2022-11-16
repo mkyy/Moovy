@@ -13,4 +13,7 @@ export class MovieEntity {
 
   @Column({ name: 'imdb_rating' })
   imdbRating: string;
+
+  @Column({ name: 'imdb_id' })
+  imdbId: string;
 }

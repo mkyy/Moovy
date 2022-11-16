@@ -29,6 +29,10 @@ __decorate([
     (0, typeorm_1.Column)({ name: 'imdb_rating' }),
     __metadata("design:type", String)
 ], MovieEntity.prototype, "imdbRating", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ name: 'imdb_id' }),
+    __metadata("design:type", String)
+], MovieEntity.prototype, "imdbId", void 0);
 MovieEntity = __decorate([
     (0, typeorm_1.Entity)({ name: 'movies' })
 ], MovieEntity);
