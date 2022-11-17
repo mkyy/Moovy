@@ -1,15 +1,18 @@
 import SearchBar from '@mkyy/mui-search-bar';
 import { Box, Container, Grid, Typography } from '@mui/material';
 import axios, { AxiosPromise } from 'axios';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import MainCard from 'ui-component/MainCard';
 import { Movie } from '@custom-types/movie';
 // images
 import Glass from 'ui-component/Glass';
+import { CustomizationContext } from 'context/CustomizationContext';
 
 const Search = () => {
   const [results, setResults] = useState<Movie[] | null>(null);
   const [filter, setFilter] = useState<string | null>(null);
+
+  const ContextComponent = useContext(CustomizationContext);
 
   const api = axios.create({
     baseURL: process.env.REACT_APP_BASEURL
@@ -28,7 +31,7 @@ const Search = () => {
 
             return { ...result, onLibrary: false };
           });
-
+          ContextComponent?.handleAlert(false, movie.Title);
           setResults(resultsUpdated ?? results);
         })
         .catch((err) => console.log(err));
@@ -46,6 +49,7 @@ const Search = () => {
       return { ...result, onLibrary: true };
     });
 
+    ContextComponent?.handleAlert(true, movie.Title);
     setResults(resultsUpdated ?? results);
   };
 
