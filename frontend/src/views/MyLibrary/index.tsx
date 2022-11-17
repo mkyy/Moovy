@@ -1,12 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Box, Container, Grid, Typography } from '@mui/material';
 import axios from 'axios';
 // project imports
 import { Movie } from '@custom-types/movie';
 import Glass from 'ui-component/Glass';
 import MainCard from 'ui-component/MainCard';
+import { CustomizationContext } from 'context/CustomizationContext';
 
 const MyLibrary = () => {
+  const ContextComponent = useContext(CustomizationContext);
+
   const [results, setResults] = useState<Movie[] | null>(null);
 
   const MoovyApi = axios.create({
@@ -18,6 +21,7 @@ const MyLibrary = () => {
       .then(() => {
         const resultsUpdated = results?.filter((result) => result.imdbID !== movie.imdbID);
 
+        ContextComponent?.handleAlert(false, movie.Title);
         setResults(resultsUpdated ?? results);
       })
       .catch((err) => console.log(err));

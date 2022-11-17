@@ -1,4 +1,13 @@
-import { Alert, AppBar, Box, Collapse, CssBaseline, IconButton, Toolbar } from '@mui/material';
+import {
+  Alert,
+  AppBar,
+  Box,
+  Collapse,
+  CssBaseline,
+  IconButton,
+  Paper,
+  Toolbar
+} from '@mui/material';
 import { Outlet } from 'react-router';
 import { styled, useTheme } from '@mui/material/styles';
 import Header from './Header';
@@ -11,7 +20,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<Ma
   ({ theme, open }) => ({
     ...theme.typography.mainContent,
     ...(open && {
-      marginTop: '150px'
+      paddingTop: '70px'
     })
   })
 );
@@ -33,9 +42,12 @@ const MainLayout = () => {
           </Toolbar>
         </AppBar>
 
+        {/* alert dialog */}
         <Box
+          component={Paper}
           sx={{
             width: '100%',
+            borderRadius: 0,
             position: 'fixed',
             top: '88px',
             display: 'flex',
@@ -58,7 +70,7 @@ const MainLayout = () => {
                     <Close fontSize='inherit' />
                   </IconButton>
                 }
-                sx={{ mb: 2 }}
+                color='success'
               >
                 {ContextComponent?.alertTitle} was added to your Library!
               </Alert>
@@ -76,7 +88,6 @@ const MainLayout = () => {
                     <Close fontSize='inherit' />
                   </IconButton>
                 }
-                sx={{ mb: 2 }}
                 color='error'
               >
                 {ContextComponent?.alertTitle} deleted from your watchlist.

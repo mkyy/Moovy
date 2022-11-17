@@ -23,6 +23,10 @@ export const CustomizationProvider: React.FC<Props> = ({ children }) => {
 
     setAlertTitle(title);
     setOpen(true);
+    //timeout
+    setTimeout(() => {
+      setOpen(false);
+    }, 5000);
   };
 
   return (
