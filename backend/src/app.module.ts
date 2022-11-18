@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MovieModule } from './app/movie/movie.module';
+import { AudioModule } from './app/audio/audio.module';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { MovieModule } from './app/movie/movie.module';
       synchronize: true,
       entities: [__dirname + '/**/*.entity{.js,.ts}']
     }),
-    MovieModule
+    MovieModule,
+    AudioModule
   ]
 })
 export class AppModule {}

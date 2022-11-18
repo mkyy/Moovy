@@ -1,7 +1,19 @@
-import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Req,
+  UploadedFile,
+  UseInterceptors
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { DeleteMovieDto } from './dto/delete-movie.dto';
 import { SaveMovieDto } from './dto/save-movie.dto';
 import { MovieService } from './movie.service';
+import { Express } from 'express';
 
 @Controller('api')
 export class MovieController {
@@ -20,5 +32,16 @@ export class MovieController {
   @Get('/movies')
   async get() {
     return this.movieService.get();
+  }
+
+  @Post('/audio/:id')
+  @UseInterceptors(FileInterceptor('file'))
+  async saveAudio(@Param('id') imdbID: string, @Req() @UploadedFile() file: Express.Multer.File) {
+    return this.movieService.addAudio(imdbID, file.buffer, file.originalname);
+  }
+
+  @Delete('/audio/:imdbID/:audioID')
+  async deleteAudio(@Param('imdbID') imdbID: string, @Param('audioID') audioID: number) {
+    return this.movieService.deleteAudio(imdbID, audioID);
   }
 }

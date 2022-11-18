@@ -1,7 +1,10 @@
+import AudioEntity from '../audio/audio.entity';
 export declare class MovieEntity {
-    id: string;
+    id: number;
     Title: string;
     Poster: string;
     imdbRating: string;
     imdbID: string;
+    audio?: AudioEntity;
+    audioId?: number;
 }

@@ -6,21 +6,21 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MovieModule = void 0;
+exports.AudioModule = void 0;
 const common_1 = require("@nestjs/common");
+const audio_service_1 = require("./audio.service");
+const audio_controller_1 = require("./audio.controller");
 const typeorm_1 = require("@nestjs/typeorm");
-const movie_entity_1 = require("./movie.entity");
-const movie_service_1 = require("./movie.service");
-const movie_controller_1 = require("./movie.controller");
-const audio_module_1 = require("../audio/audio.module");
-let MovieModule = class MovieModule {
+const audio_entity_1 = require("./audio.entity");
+let AudioModule = class AudioModule {
 };
-MovieModule = __decorate([
+AudioModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([movie_entity_1.MovieEntity]), audio_module_1.AudioModule],
-        providers: [movie_service_1.MovieService],
-        controllers: [movie_controller_1.MovieController]
+        imports: [typeorm_1.TypeOrmModule.forFeature([audio_entity_1.default])],
+        providers: [audio_service_1.AudioService],
+        controllers: [audio_controller_1.AudioController],
+        exports: [audio_service_1.AudioService]
     })
-], MovieModule);
-exports.MovieModule = MovieModule;
-//# sourceMappingURL=movie.module.js.map
+], AudioModule);
+exports.AudioModule = AudioModule;
+//# sourceMappingURL=audio.module.js.map

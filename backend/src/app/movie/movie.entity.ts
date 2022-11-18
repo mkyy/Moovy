@@ -1,9 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import AudioEntity from '../audio/audio.entity';
 
 @Entity({ name: 'movies' })
 export class MovieEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  public id: number;
 
   @Column({ name: 'title' })
   Title: string;
@@ -16,4 +17,13 @@ export class MovieEntity {
 
   @Column({ name: 'imdb_id' })
   imdbID: string;
+
+  @JoinColumn({ name: 'audioId' })
+  @OneToOne(() => AudioEntity, {
+    nullable: true
+  })
+  public audio?: AudioEntity;
+
+  @Column({ nullable: true })
+  public audioId?: number;
 }

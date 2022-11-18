@@ -11,11 +11,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MovieEntity = void 0;
 const typeorm_1 = require("typeorm");
+const audio_entity_1 = require("../audio/audio.entity");
 let MovieEntity = class MovieEntity {
 };
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)('uuid'),
-    __metadata("design:type", String)
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
+    __metadata("design:type", Number)
 ], MovieEntity.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)({ name: 'title' }),
@@ -33,6 +34,17 @@ __decorate([
     (0, typeorm_1.Column)({ name: 'imdb_id' }),
     __metadata("design:type", String)
 ], MovieEntity.prototype, "imdbID", void 0);
+__decorate([
+    (0, typeorm_1.JoinColumn)({ name: 'audioId' }),
+    (0, typeorm_1.OneToOne)(() => audio_entity_1.default, {
+        nullable: true
+    }),
+    __metadata("design:type", audio_entity_1.default)
+], MovieEntity.prototype, "audio", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    __metadata("design:type", Number)
+], MovieEntity.prototype, "audioId", void 0);
 MovieEntity = __decorate([
     (0, typeorm_1.Entity)({ name: 'movies' })
 ], MovieEntity);

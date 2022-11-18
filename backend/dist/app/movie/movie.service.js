@@ -17,9 +17,11 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const movie_entity_1 = require("./movie.entity");
+const audio_service_1 = require("../audio/audio.service");
 let MovieService = class MovieService {
-    constructor(movieRepository) {
+    constructor(movieRepository, audioService) {
         this.movieRepository = movieRepository;
+        this.audioService = audioService;
     }
     async save(data) {
         return this.movieRepository.save(this.movieRepository.create(data));
@@ -32,11 +34,27 @@ let MovieService = class MovieService {
             imdbID: data.imdbID
         });
     }
+    async addAudio(imdbID, audioBuffer, filename) {
+        const audio = await this.audioService.uploadAudio(audioBuffer, filename);
+        await this.movieRepository.update(imdbID, {
+            audioId: audio.id
+        });
+        return audio;
+    }
+    async deleteAudio(imdbID, id) {
+        await this.movieRepository.update(imdbID, {
+            audio: null,
+            audioId: null
+        });
+        const audio = await this.audioService.delete(id);
+        return audio;
+    }
 };
 MovieService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(movie_entity_1.MovieEntity)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        audio_service_1.AudioService])
 ], MovieService);
 exports.MovieService = MovieService;
 //# sourceMappingURL=movie.service.js.map

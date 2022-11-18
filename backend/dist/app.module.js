@@ -11,6 +11,7 @@ const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const typeorm_1 = require("@nestjs/typeorm");
 const movie_module_1 = require("./app/movie/movie.module");
+const audio_module_1 = require("./app/audio/audio.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -27,7 +28,8 @@ AppModule = __decorate([
                 synchronize: true,
                 entities: [__dirname + '/**/*.entity{.js,.ts}']
             }),
-            movie_module_1.MovieModule
+            movie_module_1.MovieModule,
+            audio_module_1.AudioModule
         ]
     })
 ], AppModule);

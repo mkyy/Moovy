@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MovieController = void 0;
 const common_1 = require("@nestjs/common");
+const platform_express_1 = require("@nestjs/platform-express");
 const delete_movie_dto_1 = require("./dto/delete-movie.dto");
 const save_movie_dto_1 = require("./dto/save-movie.dto");
 const movie_service_1 = require("./movie.service");
@@ -29,6 +30,12 @@ let MovieController = class MovieController {
     }
     async get() {
         return this.movieService.get();
+    }
+    async saveAudio(imdbID, file) {
+        return this.movieService.addAudio(imdbID, file.buffer, file.originalname);
+    }
+    async deleteAudio(imdbID, audioID) {
+        return this.movieService.deleteAudio(imdbID, audioID);
     }
 };
 __decorate([
@@ -51,6 +58,24 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], MovieController.prototype, "get", null);
+__decorate([
+    (0, common_1.Post)('/audio/:id'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Req)()),
+    __param(1, (0, common_1.UploadedFile)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], MovieController.prototype, "saveAudio", null);
+__decorate([
+    (0, common_1.Delete)('/audio/:imdbID/:audioID'),
+    __param(0, (0, common_1.Param)('imdbID')),
+    __param(1, (0, common_1.Param)('audioID')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Number]),
+    __metadata("design:returntype", Promise)
+], MovieController.prototype, "deleteAudio", null);
 MovieController = __decorate([
     (0, common_1.Controller)('api'),
     __metadata("design:paramtypes", [movie_service_1.MovieService])
