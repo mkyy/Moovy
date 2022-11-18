@@ -12,34 +12,18 @@ import {
 
 interface Props {
   style?: StyleProp<ViewStyle>;
-  index?: number;
-  showIndex?: boolean;
+  imgUrl?: string;
 }
 
-export const SBImageItem: React.FC<Props> = ({ style, index: _index, showIndex = true }) => {
-  const index = (_index || 0) + 1;
+export const SBImageItem: React.FC<Props> = ({ style, imgUrl }) => {
   const source = React.useRef<ImageURISource>({
-    uri: `https://picsum.photos/id/${index}/400/300`,
+    uri: imgUrl,
   }).current;
 
   return (
     <View style={[styles.container, style]}>
       <ActivityIndicator size='small' />
-      <Image key={index} style={styles.image} source={source} />
-      <Text
-        style={{
-          position: 'absolute',
-          color: 'white',
-          fontSize: 40,
-          backgroundColor: '#333333',
-          borderRadius: 5,
-          overflow: 'hidden',
-          paddingHorizontal: 10,
-          paddingTop: 2,
-        }}
-      >
-        {showIndex ? index : ''}
-      </Text>
+      <Image key={imgUrl} style={styles.image} source={source} />
     </View>
   );
 };

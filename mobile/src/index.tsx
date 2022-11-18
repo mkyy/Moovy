@@ -4,18 +4,21 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import MoviesCarousel from './components/CarouselComp';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Provider as PaperProvider } from 'react-native-paper';
 
 const Stack = createNativeStackNavigator();
 
-export default function MobileTest() {
+export default function MobileMoovy() {
   return (
     <GestureHandlerRootView style={styles.container}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name='My Library' component={MoviesCarousel} />
-        </Stack.Navigator>
-      </NavigationContainer>
-      <StatusBar style='auto' />
+      <PaperProvider>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen name='My Library' component={MoviesCarousel} />
+          </Stack.Navigator>
+        </NavigationContainer>
+        <StatusBar style='auto' />
+      </PaperProvider>
     </GestureHandlerRootView>
   );
 }

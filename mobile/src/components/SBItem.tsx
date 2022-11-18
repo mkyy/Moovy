@@ -9,29 +9,15 @@ import type { ViewProps } from 'react-native';
 
 interface Props extends AnimateProps<ViewProps> {
   style?: StyleProp<ViewStyle>;
-  index: number;
-  pretty?: boolean;
+  imgUrl: string;
 }
 
 export const SBItem: React.FC<Props> = props => {
-  const { style, index, pretty, ...animatedViewProps } = props;
-  // @ts-ignore
-  // const enablePretty = Constants.manifest.extra.enablePretty;
-  const [isPretty, setIsPretty] = React.useState(pretty);
+  const { style, imgUrl, ...animatedViewProps } = props;
+
   return (
-    <LongPressGestureHandler
-      onActivated={() => {
-        setIsPretty(!isPretty);
-      }}
-    >
-      <Animated.View style={{ flex: 1 }} {...animatedViewProps}>
-        {isPretty ? (
-          <SBImageItem style={style} index={index} />
-        ) : (
-          <SBTextItem style={style} index={index} />
-        )}
-        <Text>{index}</Text>
-      </Animated.View>
-    </LongPressGestureHandler>
+    <Animated.View style={{ flex: 1 }} {...animatedViewProps}>
+      <SBImageItem style={style} imgUrl={imgUrl} />
+    </Animated.View>
   );
 };
