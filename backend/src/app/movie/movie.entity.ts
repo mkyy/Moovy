@@ -12,6 +12,9 @@ export class MovieEntity {
   @Column({ name: 'poster' })
   Poster: string;
 
+  @Column({ name: 'year' })
+  Year: string;
+
   @Column({ name: 'imdb_rating' })
   imdbRating: string;
 

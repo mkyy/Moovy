@@ -27,6 +27,10 @@ __decorate([
     __metadata("design:type", String)
 ], MovieEntity.prototype, "Poster", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ name: 'year' }),
+    __metadata("design:type", String)
+], MovieEntity.prototype, "Year", void 0);
+__decorate([
     (0, typeorm_1.Column)({ name: 'imdb_rating' }),
     __metadata("design:type", String)
 ], MovieEntity.prototype, "imdbRating", void 0);

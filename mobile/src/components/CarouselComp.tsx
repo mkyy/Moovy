@@ -19,6 +19,10 @@ function MoviesCarousel() {
   const [uri, setUri] = React.useState<string | null>();
   const [results, setResults] = React.useState<Movie[]>([]);
 
+  const MoovyApi = axios.create({
+    baseURL: 'http://192.168.2.6:8080/',
+  });
+
   const onStartRecord = async () => {
     try {
       console.log('Requesting permissions..');
@@ -68,9 +72,19 @@ function MoviesCarousel() {
 
   const onStopPlay = async () => {};
 
-  const MoovyApi = axios.create({
-    baseURL: 'http://192.168.2.6:8080/',
-  });
+  const submitAudio = (movie: Movie) => {
+    const audioFile = new FormData();
+    // @ts-ignore
+    audioFile.append('file', { uri: uri, name: 'audio-record', type: 'audio/m4a' });
+
+    MoovyApi.post(`api/audio/1`, audioFile, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+      .then(snapshot => console.log('Arquivo de audio enviado para o servidor.'))
+      .catch(err => console.error(err));
+  };
 
   const baseOptions = {
     vertical: false,
@@ -90,49 +104,65 @@ function MoviesCarousel() {
   }, []);
 
   return (
-    <View
-      style={{
-        alignItems: 'center',
-      }}
-    >
-      <Carousel
-        {...baseOptions}
-        loop
-        pagingEnabled={true}
-        snapEnabled={true}
-        autoPlay={false}
-        autoPlayInterval={1500}
-        onScrollEnd={idx => setProgressValue(idx)}
-        mode='parallax'
-        modeConfig={{
-          parallaxScrollingScale: 0.9,
-          parallaxScrollingOffset: 50,
-        }}
-        data={results ?? []}
-        renderItem={({ index }) => <SBItem imgUrl={results[index].Poster} />}
-      />
-      <View
-        style={{
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          width: '80%',
-          alignSelf: 'center',
-        }}
-      >
-        {/* movies data goes here  */}
-        <Text variant='headlineMedium'>{results.length && results[progressValue].Title}</Text>
-        <View style={{ flexDirection: 'row' }}>
-          <Image style={{ marginRight: 5 }} source={require('../assets/star.png')} />
-          <Text>{results.length && results[progressValue].imdbRating}</Text>
+    <>
+      {!results.length && (
+        <View
+          style={{
+            alignItems: 'center',
+          }}
+        >
+          <Text>
+            It looks like there are no movies in your library! Go to you web application and add
+            some!
+          </Text>
         </View>
+      )}
+      {results.length > 0 && (
+        <View
+          style={{
+            alignItems: 'center',
+          }}
+        >
+          <Carousel
+            {...baseOptions}
+            loop
+            pagingEnabled={true}
+            snapEnabled={true}
+            autoPlay={false}
+            autoPlayInterval={1500}
+            onScrollEnd={idx => setProgressValue(idx)}
+            mode='parallax'
+            modeConfig={{
+              parallaxScrollingScale: 0.9,
+              parallaxScrollingOffset: 50,
+            }}
+            data={results ?? []}
+            renderItem={({ index }) => <SBItem imgUrl={results[index].Poster} />}
+          />
+          <View
+            style={{
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              width: '80%',
+              alignSelf: 'center',
+            }}
+          >
+            {/* movies data goes here  */}
+            <Text variant='headlineMedium'>{results.length && results[progressValue].Title}</Text>
+            <View style={{ flexDirection: 'row' }}>
+              <Image style={{ marginRight: 5 }} source={require('../assets/star.png')} />
+              <Text>{results.length && results[progressValue].imdbRating}</Text>
+            </View>
 
-        <Button onPress={onStartRecord}>start record</Button>
-        <Button onPress={onStopRecord}>stop record</Button>
-        <Button onPress={onStartPlay}>PLAY</Button>
-        <Button onPress={onStopPlay}>STOP</Button>
-      </View>
-    </View>
+            <Button onPress={onStartRecord}>start record</Button>
+            <Button onPress={onStopRecord}>stop record</Button>
+            <Button onPress={onStartPlay}>PLAY</Button>
+            <Button onPress={() => submitAudio(results[progressValue])}>SUBMIT</Button>
+          </View>
+        </View>
+      )}
+    </>
   );
 }
 

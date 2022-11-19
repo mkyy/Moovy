@@ -3,6 +3,7 @@ export declare class MovieEntity {
     id: number;
     Title: string;
     Poster: string;
+    Year: string;
     imdbRating: string;
     imdbID: string;
     audio?: AudioEntity;
