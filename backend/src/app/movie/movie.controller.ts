@@ -40,8 +40,8 @@ export class MovieController {
     return this.movieService.addAudio(imdbID, file.buffer, file.originalname);
   }
 
-  @Delete('/audio/:imdbID/:audioID')
-  async deleteAudio(@Param('imdbID') imdbID: string, @Param('audioID') audioID: number) {
-    return this.movieService.deleteAudio(imdbID, audioID);
+  @Delete('/audio/:movieId/:audioID')
+  async deleteAudio(@Param('movieId') movieId: string, @Param('audioID') audioID: number) {
+    return this.movieService.deleteAudio(movieId, audioID);
   }
 }

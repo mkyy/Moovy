@@ -30,9 +30,9 @@ export class MovieService {
     });
   }
 
-  async addAudio(imdbID: string, audioBuffer: Buffer, filename: string) {
+  async addAudio(id: string, audioBuffer: Buffer, filename: string) {
     const audio = await this.audioService.uploadAudio(audioBuffer, filename);
-    await this.movieRepository.update(imdbID, {
+    await this.movieRepository.update(id, {
       audioId: audio.id
     });
     return audio;

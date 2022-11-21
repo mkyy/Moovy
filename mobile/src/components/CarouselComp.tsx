@@ -1,13 +1,15 @@
 import * as React from 'react';
-import { Image, View } from 'react-native';
+import { Animated, Image, PanResponder, View } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 import { SBItem } from './SBItem';
 import { window } from '../constants';
 import axios from 'axios';
 import { Movie } from '../@custom-types/movie';
-import { Button, Text } from 'react-native-paper';
+import { Button, IconButton, Text } from 'react-native-paper';
 import { Audio } from 'expo-av';
 import { Recording, Sound } from 'expo-av/build/Audio';
+import { isConnected } from '../utils/InternetInfo';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const PAGE_WIDTH = window.width;
 // to-do movies data goes here.
@@ -19,23 +21,21 @@ function MoviesCarousel() {
   const [uri, setUri] = React.useState<string | null>();
   const [results, setResults] = React.useState<Movie[]>([]);
 
+  const baseOptions = {
+    vertical: false,
+    width: PAGE_WIDTH,
+    height: PAGE_WIDTH * 1.2,
+  } as const;
+
   const MoovyApi = axios.create({
-    baseURL: 'http://192.168.2.6:8080/',
+    baseURL: process.env.REACT_APP_MOOVY_API,
   });
 
   const onStartRecord = async () => {
     try {
-      console.log('Requesting permissions..');
-      await Audio.requestPermissionsAsync();
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: true,
-        playsInSilentModeIOS: true,
-      });
-
       const { recording } = await Audio.Recording.createAsync(
         Audio.RecordingOptionsPresets.HIGH_QUALITY
       );
-      console.log(recording);
       setRecording(recording);
       console.log('Recording started');
     } catch (err) {
@@ -50,21 +50,21 @@ function MoviesCarousel() {
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: false,
     });
-    const uri = recording?.getURI();
-    setUri(uri);
-    console.log('Recording stopped and stored at', uri);
+    const uriDir = recording?.getURI();
+    setUri(uriDir);
+    console.log('Recording stopped and stored at', uriDir);
   };
 
-  const onStartPlay = async () => {
+  const onStartPlay = async (audioId: number | null) => {
     try {
-      if (uri) {
-        console.log('Loading Sound');
-        const { sound } = await Audio.Sound.createAsync({ uri: uri });
-        setSound(sound);
+      console.log('Loading Sound');
+      const { sound } = await Audio.Sound.createAsync({
+        uri: `${process.env.REACT_APP_MOOVY_API}audio/${audioId}`,
+      });
+      setSound(sound);
 
-        console.log('Playing Sound');
-        await sound.playAsync();
-      }
+      console.log('Playing Sound');
+      await sound.playAsync();
     } catch (err) {
       console.error('Failed to start playing', err);
     }
@@ -77,7 +77,7 @@ function MoviesCarousel() {
     // @ts-ignore
     audioFile.append('file', { uri: uri, name: 'audio-record', type: 'audio/m4a' });
 
-    MoovyApi.post(`api/audio/1`, audioFile, {
+    MoovyApi.post(`api/audio/${movie.id}`, audioFile, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -86,21 +86,83 @@ function MoviesCarousel() {
       .catch(err => console.error(err));
   };
 
-  const baseOptions = {
-    vertical: false,
-    width: PAGE_WIDTH,
-    height: PAGE_WIDTH * 1.2,
-  } as const;
+  const getData = async () => {};
+
+  const panResponder = React.useMemo(
+    () =>
+      PanResponder.create({
+        onStartShouldSetPanResponderCapture: () => true,
+        onPanResponderStart: () => onStartRecord(),
+        // onPanResponderRelease: () => onStopRecord(),
+        onPanResponderEnd: () => onStopRecord(),
+      }),
+    [recording]
+  );
 
   React.useEffect(() => {
-    MoovyApi.get('api/movies')
-      .then(snapshot => {
-        if (snapshot.data.length < 1) return setResults([]);
+    async function getPerms() {
+      console.log('Requesting permissions..');
+      await Audio.requestPermissionsAsync();
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+      });
+    }
+    getPerms();
 
-        const data: Movie[] = snapshot.data;
-        setResults(data);
+    isConnected()
+      .then(() => {
+        MoovyApi.get('api/movies')
+          .then(async snapshot => {
+            if (snapshot.data.length < 1) {
+              await AsyncStorage.removeItem('movies');
+              return setResults([]);
+            }
+
+            // ============ THERE IS MOVIES ON SERVER DATABASE ============
+            const data: Movie[] = snapshot.data;
+            const myLibraryJSON = await AsyncStorage.getItem('movies');
+            const myLibraryParsed: Movie[] =
+              myLibraryJSON != null ? JSON.parse(myLibraryJSON) : null;
+
+            // checking if no movies from storage were deleted from server
+            const myLibraryStorage = myLibraryParsed.filter(
+              movie => data.find(movieFromDB => movieFromDB.imdbID === movie.imdbID) !== undefined
+            );
+
+            const recentlyAddedMovies = data.filter(
+              movie =>
+                myLibraryStorage.find(storedMovie => storedMovie.imdbID === movie.imdbID) ===
+                undefined
+            );
+
+            recentlyAddedMovies.forEach(movie =>
+              myLibraryStorage.push({ ...movie, localAudioUri: null })
+            );
+            setResults(myLibraryStorage);
+
+            // saving movies on storage as json
+            const jsonValue = JSON.stringify(myLibraryStorage);
+            await AsyncStorage.setItem('movies', jsonValue).then(() =>
+              console.log('armazenado no storage')
+            );
+          })
+          .catch(err => console.log(err));
       })
-      .catch(err => console.log(err));
+      .catch(async () => {
+        // case there is no internet connection
+        console.log('offline');
+        try {
+          const jsonValue = await AsyncStorage.getItem('movies');
+          const result = jsonValue != null ? JSON.parse(jsonValue) : null;
+
+          if (!result) return setResults([]);
+
+          return setResults(result);
+        } catch (e) {
+          console.error(e);
+        }
+      });
   }, []);
 
   return (
@@ -108,10 +170,14 @@ function MoviesCarousel() {
       {!results.length && (
         <View
           style={{
+            width: '100%',
+            height: '70%',
             alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
-          <Text>
+          <Image source={require('../assets/magnify.png')} />
+          <Text style={{ width: '80%' }}>
             It looks like there are no movies in your library! Go to you web application and add
             some!
           </Text>
@@ -154,11 +220,24 @@ function MoviesCarousel() {
               <Image style={{ marginRight: 5 }} source={require('../assets/star.png')} />
               <Text>{results.length && results[progressValue].imdbRating}</Text>
             </View>
+            {!results[progressValue].audioId && (
+              <IconButton
+                mode='contained'
+                containerColor='#6CD3AE'
+                icon='microphone-outline'
+                {...panResponder.panHandlers}
+              ></IconButton>
+            )}
 
-            <Button onPress={onStartRecord}>start record</Button>
-            <Button onPress={onStopRecord}>stop record</Button>
-            <Button onPress={onStartPlay}>PLAY</Button>
-            <Button onPress={() => submitAudio(results[progressValue])}>SUBMIT</Button>
+            {!!results[progressValue].audioId && (
+              <IconButton
+                mode='contained'
+                containerColor='#6CD3AE'
+                icon='play'
+                onPress={() => onStartPlay(results[progressValue].audioId)}
+              ></IconButton>
+            )}
+            <Button onPress={() => getData()}>GET DATA</Button>
           </View>
         </View>
       )}
