@@ -10,7 +10,7 @@ import { CustomizationContext } from 'context/CustomizationContext';
 
 const Search = () => {
   const [results, setResults] = useState<Movie[] | null>(null);
-  const [filter, setFilter] = useState<string | null>(null);
+  const [filter, setFilter] = useState<string | null | undefined>(null);
 
   const ContextComponent = useContext(CustomizationContext);
 
