@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "REACT_APP_MOOVY_API='http://ec2-18-228-24-92.sa-east-1.compute.amazonaws.com:8080/' expo start --clear",
+    "start": "REACT_APP_MOOVY_API='http://ec2-18-228-24-92.sa-east-1.compute.amazonaws.com:8080/' expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web"
