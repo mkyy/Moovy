@@ -11,6 +11,7 @@ movies and record audio reviews. The user can manage a list called “My Library
 can save his previously watched movies. After saving them in the library, the user can upload an
 audio file review for that movie.
 
+Check the [deployed website](http://moovy-client.s3-website-sa-east-1.amazonaws.com) right now!
 
 ## Features
 
