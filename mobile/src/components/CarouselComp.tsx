@@ -1,5 +1,5 @@
 import * as React from 'react';
-import NetInfo from '@react-native-community/netinfo';
+import NetInfo, { NetInfoSubscription } from '@react-native-community/netinfo';
 import { Animated, Image, PanResponder, View } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 import { SBItem } from './SBItem';
@@ -32,6 +32,7 @@ function MoviesCarousel() {
 
   // utils
   const [isDialogVisible, setIsDialogVisible] = React.useState(false);
+  const [unsubscribe, setUnsubscribe] = React.useState<NetInfoSubscription | null>(null);
 
   const baseOptions = {
     vertical: false,
@@ -75,7 +76,6 @@ function MoviesCarousel() {
         from: uriDir,
         to: FileSystem.documentDirectory + `audio-${results[progressValue].id}.m4a`,
       }).then(async snapshot => {
-        console.log('arquivo movido para storage');
         let resultsUpdated = results.map(movie => {
           if (movie.id !== results[progressValue].id) return movie;
 
@@ -105,21 +105,30 @@ function MoviesCarousel() {
     }
   };
 
-  const deleteAudio = () => {
-    FileSystem.deleteAsync(
-      FileSystem.documentDirectory + `audio-${results[progressValue].id}.m4a`
-    ).then(async () => {
-      let resultsUpdated = results.map(movie => {
-        if (movie.id !== results[progressValue].id) return movie;
+  const deleteAudio = async () => {
+    return await MoovyApi.delete(
+      `api/audio/${results[progressValue].id}/${results[progressValue].audioId}`
+    )
+      .then(() => {
+        FileSystem.deleteAsync(
+          FileSystem.documentDirectory + `audio-${results[progressValue].id}.m4a`
+        ).then(async () => {
+          let resultsUpdated = results.map(movie => {
+            if (movie.id !== results[progressValue].id) return movie;
 
-        return {
-          ...movie,
-          localAudioUri: null,
-        };
+            return {
+              ...movie,
+              localAudioUri: null,
+              audioId: null,
+            };
+          });
+          setResults(resultsUpdated);
+          await AsyncStorage.setItem('movies', JSON.stringify(resultsUpdated));
+        });
+      })
+      .catch(err => {
+        console.log(err);
       });
-      setResults(resultsUpdated);
-      await AsyncStorage.setItem('movies', JSON.stringify(resultsUpdated));
-    });
   };
 
   const submitAudio = (movie: Movie) => {
@@ -198,7 +207,6 @@ function MoviesCarousel() {
               myLibraryStorage.push({ ...movie, localAudioUri: null })
             );
 
-            console.log(myLibraryStorage);
             setResults(myLibraryStorage);
 
             // saving movies on storage as json
@@ -225,9 +233,12 @@ function MoviesCarousel() {
 
   React.useEffect(() => {
     let checkPassed = results.find(movie => movie.localAudioUri && !movie.audioId);
-    if (checkPassed === undefined) return;
+    if (checkPassed === undefined) {
+      if (unsubscribe) unsubscribe();
+      return;
+    }
 
-    const unsubscribe = NetInfo.addEventListener(state => {
+    const unsub = NetInfo.addEventListener(state => {
       if (state.isConnected) {
         results.forEach(movie => {
           if (movie.localAudioUri && !movie.audioId) {
@@ -238,6 +249,7 @@ function MoviesCarousel() {
         console.warn('Connect internet to sync your audios. Sync failed.');
       }
     });
+    setUnsubscribe(unsub);
   }, [results]);
 
   return (
@@ -376,7 +388,13 @@ function MoviesCarousel() {
             textColor='#fff'
             buttonColor='#FE6D8E'
             onPress={() => {
-              deleteAudio();
+              try {
+                deleteAudio();
+              } catch (err) {
+                alert(
+                  'erro ao deletar seu audio, verifique sua conexão com a internet e tente novamente.'
+                );
+              }
               hideDialog();
             }}
           >
