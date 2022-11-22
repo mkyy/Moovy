@@ -41,7 +41,7 @@ export class MovieController {
   }
 
   @Delete('/audio/:movieId/:audioID')
-  async deleteAudio(@Param('movieId') movieId: string, @Param('audioID') audioID: number) {
+  async deleteAudio(@Param('movieId') movieId: number, @Param('audioID') audioID: number) {
     return this.movieService.deleteAudio(movieId, audioID);
   }
 }

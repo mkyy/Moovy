@@ -38,8 +38,8 @@ export class MovieService {
     return audio;
   }
 
-  async deleteAudio(imdbID: string, id: number) {
-    await this.movieRepository.update(imdbID, {
+  async deleteAudio(movieId: number, id: number) {
+    await this.movieRepository.update(movieId, {
       audio: null,
       audioId: null
     });
