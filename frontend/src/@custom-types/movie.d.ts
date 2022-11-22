@@ -6,4 +6,6 @@ export type Movie = {
   imdbID: string;
   imdbRating?: string;
   onLibrary?: boolean;
+  audioId: number | null;
+  id: number;
 };

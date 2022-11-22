@@ -49,7 +49,8 @@ export default function componentStyleOverrides(theme: any) {
     MuiCardMedia: {
       styleOverrides: {
         root: {
-          borderRadius: `${theme?.customization?.borderRadius}px`
+          borderRadius: `${theme?.customization?.borderRadius}px`,
+          overflow: 'hidden'
         }
       }
     },
