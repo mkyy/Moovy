@@ -12,16 +12,45 @@ can save his previously watched movies. After saving them in the library, the us
 audio file review for that movie.
 
 
+## Features
+
+- Search Movies
+- Add to Library
+- Visualize Library
+- Remove from Library
+- Create Reviews
+- Listen to Reviews
+- Delete Review
+- Light/dark mode toggle
+- Cross platform
+
 ## Tech Stack
 
-**Front-end:** Typescript, ReactJs, Material UI
+**Front-end:** Typescript, ReactJs, Material UI, @mkyy/mui-search-bar
 
 **Back-end:** Typescript, NestJs, Rest, TypeORM, Postgres
 
-**Mobile:** Typescript, React Native, React Native Paper, React Navigation
+**Mobile:** Typescript, React Native, React Native Paper, React Navigation, Expo
 
 **DevOps:** AWS
 
+
+## Run Locally
+
+Clone the entire project
+
+```bash
+  git clone git@github.com:mkyy/Moovy.git
+```
+
+Go to the project directory
+
+```bash
+  cd Moovy
+```
+
+In this moment, you can see 3 folders, [frontend](https://github.com/mkyy/Moovy/tree/main/frontend) , [backend](https://github.com/mkyy/Moovy/tree/main/backend), and [mobile](https://github.com/mkyy/Moovy/tree/main/mobile).
+The installation steps of each one is on README.md file inside their corresponding folders.
 
 ## Author
 
