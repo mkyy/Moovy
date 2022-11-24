@@ -5,6 +5,8 @@
 .pnp.js
 */build
 build
+*/dist
+dist
 
 # variables
 .env
