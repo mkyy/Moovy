@@ -73,6 +73,13 @@
 ## Installation
 
 You did all steps of root README, and now you just need a few steps to start running:
+
+Make sure you're inside the backend folder, if you're on the project root, navigate to the frontend folder.
+
+```bash
+$ cd backend
+```
+
 Install dependencies
 
 ```bash
@@ -81,7 +88,15 @@ $ npm install
 
 ## Environment Variables
 
-To run this project, you will need to add the following environment variables to your .env file
+
+First, create your `.env` file, using your favorite editor, or via graphical interface.
+In my case I'll use nano.
+
+```bash
+$ nano .env
+```
+
+Add the following environment variables to your .env file
 
 `PORT`= 8080
 
@@ -94,6 +109,21 @@ To run this project, you will need to add the following environment variables to
 `DB_USERNAME`= `<your username>`
 
 `DB_PASSWORD`= `<your password>`
+
+<details>
+<summary>See an example of .env file</summary>
+
+
+```
+PORT=8080
+DB_HOST=http://localhost
+DB_PORT=5432
+DB_DATABASE=mylibrary
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
+```
+
+</details>
 
 ## Running the app
 
