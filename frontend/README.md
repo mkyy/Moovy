@@ -2,6 +2,13 @@
 ## Installation
 
 You did all steps of root README, and now you just need a few steps to start running:
+
+Make sure you're inside the frontend folder, if you're on the project root, navigate to the frontend folder.
+
+```bash
+$ cd frontend
+```
+
 Install dependencies
 
 ```bash
@@ -10,13 +17,33 @@ $ npm install
 
 ## Environment Variables
 
-To run this project, you will need to add the following environment variables to your .env file
+First, create your `.env` file, using your favorite editor, or via graphical interface.
+In my case I'll use nano.
 
-`REACT_APP_BASEURL`= https://www.omdbapi.com/
+```bash
+$ nano .env
+```
 
-`REACT_APP_MOOVY_API`= `<your local nestjs server> | http://ec2-18-228-24-92.sa-east-1.compute.amazonaws.com:8080/`
+Add the following environment variables to your .env file.
+If you don't have a omdbApi key yet, [create your Key](https://www.omdbapi.com/apikey.aspx).
 
-`REACT_APP_APIKEY`= `<your omdb api key>`
+```
+REACT_APP_BASEURL= https://www.omdbapi.com/
+REACT_APP_MOOVY_API= <your nestjs server>
+REACT_APP_APIKEY= <your omdb api key>
+```
+
+<details>
+<summary>See an example of .env file</summary>
+
+
+```
+REACT_APP_BASEURL= https://www.omdbapi.com/
+REACT_APP_MOOVY_API= http://localhost:8080/
+REACT_APP_APIKEY= 1a2b3c4d
+```
+
+</details>
 
 And that's it. You're all up to start running the app. Feel free to also visit the [deployed website](http://moovy-client.s3-website-sa-east-1.amazonaws.com/)
 
